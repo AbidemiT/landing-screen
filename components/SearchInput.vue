@@ -7,7 +7,7 @@
                     clip-rule="evenodd" />
             </svg>
         </div>
-        <input class="w-full h-56 bg-white rounded-md shadow-lg py-4 px-56 outline-none" placeholder="Search for photo" type="search" name="search"
+        <input class="input" placeholder="Search for photo" type="search" name="search"
             id="search" @input="debouncedOnInput">
     </div>
 </template>
@@ -33,3 +33,9 @@ const onInput = (e: Event) => {
 
 const debouncedOnInput = debounce(onInput, 1000);
 </script>
+
+<style scoped>
+.input {
+    @apply w-full h-56 bg-white rounded-md shadow-lg py-4 px-56 outline-none;
+}
+</style>

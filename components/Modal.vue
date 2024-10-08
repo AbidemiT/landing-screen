@@ -8,14 +8,14 @@ const { location, name, photo } = currentData;
 
 <template>
     <div class="modal">
-        <div class="bg-white rounded-md flex flex-col items-start max-w-[30%]">
+        <div class="content-wrapper">
             <img class="w-full rounded-t-md" :src="photo" :alt="`${name} photo`" />
-            <div class="p-24 flex flex-col justify-start bg-white">
+            <div class="details">
                 <h3>{{ name }}</h3>
                 <p>{{ location }}</p>
             </div>
         </div>
-        <button class="absolute text-black top-56 right-56" @click="$emit('open', 'close')">x</button>
+        <button class="btn" @click="$emit('open', 'close')">x</button>
     </div>
 </template>
 
@@ -31,5 +31,17 @@ const { location, name, photo } = currentData;
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.content-wrapper {
+    @apply bg-white rounded-md flex flex-col items-start max-w-[30%];
+}
+
+.details {
+    @apply p-24 flex flex-col justify-start bg-white;
+}
+
+.btn {
+    @apply absolute text-red-400 top-56 right-5;
 }
 </style>

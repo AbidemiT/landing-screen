@@ -3,31 +3,22 @@ import { createApi } from 'unsplash-js';
 import Card from './components/Cards/Card.vue';
 import Placeholder from './components/Cards/Placeholder.vue';
 
-interface Photo {
-  name: string;
-  location: string;
-}
-
 const config = useRuntimeConfig();
 const searchQuery = ref('');
 const isLoading = ref(false);
 const open = ref('close');
 const currentData = ref<Photo>({ name: '', location: '', photo: '' });
-
 const photos = ref<Photo[]>([]);
-
-const unsplash = createApi({
-  accessKey: config.public.unsplashAccessKey,
-});
-
-console.log("config", config);
-
 
 interface Photo {
   name: string;
   location: string;
   photo: string;
 }
+
+const unsplash = createApi({
+  accessKey: config.public.unsplashAccessKey,
+});
 
 const search = async (query: string) => {
   searchQuery.value = query;
@@ -55,10 +46,9 @@ const toggleModal = (data: Photo) => {
 
   if (!data.name) {
     open.value = 'close';
-
   }
-  
 };
+
 const firstColumn = computed(() => photos.value.slice(0, 3));
 const secondColumn = computed(() => photos.value.slice(3, 6));
 const thirdColumn = computed(() => photos.value.slice(6, 9));
@@ -67,23 +57,23 @@ const thirdColumn = computed(() => photos.value.slice(6, 9));
 
 <template>
   <main>
-    <section class="bg-gray-300 h-[280px] flex items-center justify-center">
+    <section class="search-wrapper">
       <div class="container mx-auto">
         <div class="flex items-center justify-center h-full">
           <SearchInput @search="search" v-if="!isLoading && !searchQuery" />
         </div>
         <div class="ml-32">
-          <h1 class="text-4xl font-semibold text-gray-600" v-if="isLoading">
+          <h1 class="h1" v-if="isLoading">
             Searching for "{{ searchQuery }}"
           </h1>
-          <h1 class="text-4xl font-semibold text-gray-600" v-if="!isLoading && searchQuery">
+          <h1 class="h1" v-if="!isLoading && searchQuery">
             Search results for "{{ searchQuery }}"
           </h1>
         </div>
       </div>
     </section>
-    <section class="container mx-auto z-10 -m-52 h-screen">
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-36 max-w-[900px] mx-auto" v-if="isLoading">
+    <section class="result-wrapper">
+      <div class="masonry-grid" v-if="isLoading">
         <div class="grid gap-32">
           <Placeholder />
           <Placeholder />
@@ -100,7 +90,7 @@ const thirdColumn = computed(() => photos.value.slice(6, 9));
           <Placeholder />
         </div>
       </div>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-36 max-w-[900px] mx-auto" v-if="!isLoading && searchQuery">
+      <div class="masonry-grid" v-if="!isLoading && searchQuery">
         <div class="grid gap-32">
           <Card v-for="({ name, location, photo }, index) in firstColumn" :name=name :location=location :photo=photo
             :key=index @open="toggleModal" />
@@ -121,3 +111,20 @@ const thirdColumn = computed(() => photos.value.slice(6, 9));
     </Teleport>
   </main>
 </template>
+
+<style scoped>
+.h1 {
+  @apply text-4xl font-semibold text-gray-600;
+}
+.search-wrapper {
+  @apply bg-gray-300 h-[280px] flex items-center justify-center;
+}
+
+.result-wrapper {
+  @apply container mx-auto z-10 -m-52 h-screen;
+}
+
+.masonry-grid {
+  @apply grid grid-cols-1 md:grid-cols-3 gap-36 max-w-[900px] mx-auto;
+}
+</style>
